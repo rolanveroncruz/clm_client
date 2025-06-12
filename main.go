@@ -1,0 +1,37 @@
+package main
+
+import (
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
+	"log"
+	"net/http"
+	"os"
+	"ph.certs.com/clm_client/auth"
+	http01 "ph.certs.com/clm_client/http01_challenge"
+	"ph.certs.com/clm_client/middleware"
+)
+
+func main() {
+	dotEnvErr := godotenv.Load()
+	if dotEnvErr != nil {
+		log.Fatal("Error loading .env file")
+	}
+	portStr := ":" + os.Getenv("CLM_CLIENT_PORT")
+	muxRouter := mux.NewRouter()
+	muxRouter.Handle("POST /login", middleware.LoggingMiddleware(middleware.CorsMiddleware(
+		http.HandlerFunc(auth.Login)))).Methods("POST")
+
+	muxRouter.Handle("PUT /.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
+		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
+
+	muxRouter.Handle("GET /.well-known/acme-challenge/{token}", middleware.LoggingMiddleware(
+		middleware.JWTMiddleware(http.HandlerFunc(http01.GetChallenge)))).Methods("GET")
+
+	muxRouter.Handle("GET /", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
+	println("Listening on port " + portStr + "...")
+	listenErr := http.ListenAndServe(portStr, muxRouter)
+	if listenErr != nil {
+		panic(listenErr)
+	}
+
+}

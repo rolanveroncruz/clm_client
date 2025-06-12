@@ -1,0 +1,22 @@
+### GET index page
+GET localhost:5002/
+
+
+### POST login
+POST  localhost:5002/login
+Content-Type: application/json
+
+{"email":  "admin@certs.com.ph", "password": "<PASSWORD>"}
+
+
+
+### PUT new challenge pair
+PUT localhost:5002/.well-known/acme-challenge/put-pair
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGNlcnRzLmNvbS5waCIsImV4cCI6MTc0OTk4MDgzMSwibmFtZSI6IkFkbWluaXN0cmF0b3IifQ.d8xVrz2NILyh8J5DhA0q1uH9B0qZuISUCSs52mmsZoo
+
+{"token": "flash", "authstring": "thunder"}
+
+
+### GET authorization string from token
+GET localhost:5002/.well-known/acme-challenge/flash
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGNlcnRzLmNvbS5waCIsImV4cCI6MTc0OTk4MDgzMSwibmFtZSI6IkFkbWluaXN0cmF0b3IifQ.d8xVrz2NILyh8J5DhA0q1uH9B0qZuISUCSs52mmsZoo
