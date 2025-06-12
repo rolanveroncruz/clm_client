@@ -18,16 +18,16 @@ func main() {
 	}
 	portStr := ":" + os.Getenv("CLM_CLIENT_PORT")
 	muxRouter := mux.NewRouter()
-	muxRouter.Handle("POST /login", middleware.LoggingMiddleware(middleware.CorsMiddleware(
+	muxRouter.Handle("/login", middleware.LoggingMiddleware(middleware.CorsMiddleware(
 		http.HandlerFunc(auth.Login)))).Methods("POST")
 
-	muxRouter.Handle("PUT /.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
+	muxRouter.Handle("/.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
 		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
 
-	muxRouter.Handle("GET /.well-known/acme-challenge/{token}", middleware.LoggingMiddleware(
+	muxRouter.Handle("/.well-known/acme-challenge/{token}", middleware.LoggingMiddleware(
 		middleware.JWTMiddleware(http.HandlerFunc(http01.GetChallenge)))).Methods("GET")
 
-	muxRouter.Handle("GET /", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
+	muxRouter.Handle("/", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
 	println("Listening on port " + portStr + "...")
 	listenErr := http.ListenAndServe(portStr, muxRouter)
 	if listenErr != nil {
