@@ -36,6 +36,7 @@ func main() {
 	if listenErr != nil {
 		panic(listenErr)
 	}
+}
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
