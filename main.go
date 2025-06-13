@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	"log"
@@ -28,10 +29,16 @@ func main() {
 		http.HandlerFunc(http01.GetChallenge))).Methods("GET")
 
 	muxRouter.Handle("/", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
+
+	muxRouter.NotFoundHandler = http.HandlerFunc(notFound)
 	println("Listening on port " + portStr + "...")
 	listenErr := http.ListenAndServe(portStr, muxRouter)
 	if listenErr != nil {
 		panic(listenErr)
 	}
+}
 
+func notFound(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
+	fmt.Printf("Not found %s %s", r.Method, r.URL.Path)
 }
