@@ -36,9 +36,8 @@ func main() {
 	if listenErr != nil {
 		panic(listenErr)
 	}
-}
 
 func notFound(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotFound)
-	fmt.Printf("Not found %s %s", r.Method, r.URL.Path)
+	fmt.Printf("Not found %s %s\n", r.Method, r.URL.Path)
 }
