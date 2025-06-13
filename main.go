@@ -25,7 +25,7 @@ func main() {
 		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
 
 	muxRouter.Handle("/acme-challenge/{token}", middleware.LoggingMiddleware(
-		middleware.JWTMiddleware(http.HandlerFunc(http01.GetChallenge)))).Methods("GET")
+		http.HandlerFunc(http01.GetChallenge))).Methods("GET")
 
 	muxRouter.Handle("/", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
 	println("Listening on port " + portStr + "...")
