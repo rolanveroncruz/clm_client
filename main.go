@@ -24,7 +24,7 @@ func main() {
 	muxRouter.Handle("/.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
 		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
 
-	muxRouter.Handle("/.well-known/acme-challenge/{token}", middleware.LoggingMiddleware(
+	muxRouter.Handle("/acme-challenge/{token}", middleware.LoggingMiddleware(
 		middleware.JWTMiddleware(http.HandlerFunc(http01.GetChallenge)))).Methods("GET")
 
 	muxRouter.Handle("/", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
