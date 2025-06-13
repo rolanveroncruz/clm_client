@@ -80,6 +80,10 @@ func GetChallenge(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	challenge := challengeMap[token]
+	if challenge == "" {
+		w.Write([]byte("challenge not found"))
+		return
+	}
 	_, writeErr := w.Write([]byte(challenge))
 	if writeErr != nil {
 		http.Error(w, writeErr.Error(), http.StatusInternalServerError)
@@ -119,4 +123,21 @@ func LoadMap(filename string) (map[string]string, error) {
 	}
 	return data, nil
 
+}
+
+func AcmeChallengeNoSlash(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("acme-challenge-no-slash"))
+}
+func AcmeChallengeSlashFrontOnly(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("acme-challenge slash front only"))
+}
+func AcmeChallengeSlashFrontBack(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("acme-challenge slash front-back"))
+}
+func AcmeChallengeSlashBackOnly(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/plain")
+	w.Write([]byte("acme-challenge-no-slash-front"))
 }
