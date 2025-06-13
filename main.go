@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"ph.certs.com/clm_client/auth"
+	"ph.certs.com/clm_client/certs"
 	http01 "ph.certs.com/clm_client/http01_challenge"
 	"ph.certs.com/clm_client/middleware"
 )
@@ -39,6 +40,9 @@ func main() {
 
 	muxRouter.Handle("/acme-challenge/{token}", middleware.LoggingMiddleware(
 		http.HandlerFunc(http01.GetChallenge))).Methods("GET")
+
+	muxRouter.Handle("/upload", middleware.LoggingMiddleware(
+		middleware.JWTMiddleware(http.HandlerFunc(certs.UploadFileHandler)))).Methods("POST")
 
 	muxRouter.Handle("/", middleware.LoggingMiddleware(http.FileServer(http.Dir("./static/")))).Methods("GET")
 

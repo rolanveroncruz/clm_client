@@ -15,9 +15,9 @@ import (
 var lumberjackLogger = &lumberjack.Logger{
 	Filename:   "logs/log.log", //filename
 	MaxSize:    100,            // file size in MB before rotation
-	MaxBackups: 10,             // Max number of files kept before being overwritten
-	MaxAge:     28,             // Max number of days to keep the files
-	Compress:   true,           // Whether to compress log files using gzip
+	MaxBackups: 10,             // Max number of uploads kept before being overwritten
+	MaxAge:     28,             // Max number of days to keep the uploads
+	Compress:   true,           // Whether to compress log uploads using gzip
 }
 var logger = zerolog.New(lumberjackLogger).With().Timestamp().Logger()
 
