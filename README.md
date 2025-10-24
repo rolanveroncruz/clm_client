@@ -1,5 +1,12 @@
-# clm_client
-The clm_client has the following functions:
+# CLM Client
+The CLM Client is one of three components that compose the Certificate Lifecycle Management system.
+It is the server application that will run on the server whose certificate is being managed.
+It implements an http server to respond to CLM Acme's attempt to setup the HTTP-01 solution.
+
+
+
+
+The clm client has the following functions:
 
 * Respond to ACME challenges:
   1) HTTP01 Challenge

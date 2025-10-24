@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 )
 
-// const uploadDir = "./uploads" // Directory to save uploaded uploads
 // UploadFileHandler handles file uploads in the route "/upload". It accepts the file
 // and writes it to file path described by the environment variable "CERT_FILE_PATH".
 func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
@@ -75,4 +74,5 @@ func UploadFileHandler(w http.ResponseWriter, r *http.Request) {
 	if printErr != nil {
 		return
 	}
+	// TODO: Restart NGINX: sudo systemctl restart nginx
 }
