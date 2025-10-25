@@ -23,28 +23,16 @@ func main() {
 	muxRouter := mux.NewRouter()
 	// POST /login accepts a username and password and returns a JWT token.
 	// For now, we hardcode the username and password.
-	muxRouter.Handle("/login", middleware.LoggingMiddleware(middleware.CorsMiddleware(
+	muxRouter.Handle("/acme/login", middleware.LoggingMiddleware(middleware.CorsMiddleware(
 		http.HandlerFunc(auth.Login)))).Methods("POST")
 
 	// PUT /.well-known/acme-challenge/put-pair accepts a token-authorization string pair
 	//to be saved for the HTTP-01 challenge.
-	muxRouter.Handle("/.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
+	muxRouter.Handle("/acme/.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
 		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
 
 	// GET acme-challenge responds to the HTTP-01 challenge.
-	muxRouter.Handle("acme-challenge", middleware.LoggingMiddleware(
-		http.HandlerFunc(http01.AcmeChallengeNoSlash))).Methods("GET")
-
-	muxRouter.Handle("/acme-challenge", middleware.LoggingMiddleware(
-		http.HandlerFunc(http01.AcmeChallengeSlashFrontOnly))).Methods("GET")
-
-	muxRouter.Handle("/acme-challenge/", middleware.LoggingMiddleware(
-		http.HandlerFunc(http01.AcmeChallengeSlashFrontBack))).Methods("GET")
-
-	muxRouter.Handle("acme-challenge/", middleware.LoggingMiddleware(
-		http.HandlerFunc(http01.AcmeChallengeSlashBackOnly))).Methods("GET")
-
-	muxRouter.Handle("/acme-challenge/{token}", middleware.LoggingMiddleware(
+	muxRouter.Handle("/acme/acme-challenge/{token}", middleware.LoggingMiddleware(
 		http.HandlerFunc(http01.GetChallenge))).Methods("GET")
 
 	muxRouter.Handle("/upload", middleware.LoggingMiddleware(
