@@ -20,15 +20,18 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 	portStr := ":" + os.Getenv("CLM_CLIENT_PORT")
+	acme_prefix := os.Getenv("ACME_PREFIX")
 	muxRouter := mux.NewRouter()
 	// POST /login accepts a username and password and returns a JWT token.
 	// For now, we hardcode the username and password.
-	muxRouter.Handle("/acme/login", middleware.LoggingMiddleware(middleware.CorsMiddleware(
+	login_url := acme_prefix + "/login"
+	muxRouter.Handle(login_url, middleware.LoggingMiddleware(middleware.CorsMiddleware(
 		http.HandlerFunc(auth.Login)))).Methods("POST")
 
 	// PUT /.well-known/acme-challenge/put-pair accepts a token-authorization string pair
 	//to be saved for the HTTP-01 challenge.
-	muxRouter.Handle("/acme/.well-known/acme-challenge/put-pair", middleware.LoggingMiddleware(
+	putPairURL := acme_prefix + "/.well-known/acme-challenge/put-pair"
+	muxRouter.Handle(putPairURL, middleware.LoggingMiddleware(
 		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
 
 	// GET acme-challenge responds to the HTTP-01 challenge.
