@@ -32,7 +32,7 @@ func main() {
 		middleware.JWTMiddleware(http.HandlerFunc(http01.PutChallenge)))).Methods("PUT")
 
 	// GET acme-challenge responds to the HTTP-01 challenge.
-	muxRouter.Handle("/acme/acme-challenge/{token}", middleware.LoggingMiddleware(
+	muxRouter.Handle("/.well-known/acme-challenge/{token}", middleware.LoggingMiddleware(
 		http.HandlerFunc(http01.GetChallenge))).Methods("GET")
 
 	muxRouter.Handle("/upload", middleware.LoggingMiddleware(
